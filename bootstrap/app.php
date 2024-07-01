@@ -16,6 +16,9 @@ return Application::configure(basePath: dirname(__DIR__))
             \Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class,
         ]);
 
+        // only send request to matching hostname
+        // $middleware->trustHosts(at: ['']);
+
         //
     })
     ->withExceptions(function (Exceptions $exceptions) {
