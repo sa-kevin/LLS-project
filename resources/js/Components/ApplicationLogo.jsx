@@ -1,3 +1,3 @@
 export default function ApplicationLogo(props) {
-  return <img src="images/logo_bt.png" alt="" />;
+  return <img className="h-36 w-auto" src="images/logo_bt.png" alt="" />;
 }
