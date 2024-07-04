@@ -13,7 +13,7 @@ class BookController extends Controller
     {
         $query = Book::query();
         $books = $query->paginate(10);
-        return Inertia::render('Books', ['books' => $books]);
+        return Inertia::render('Books', ['books' => $books->items()]);
     }
   
     public function create()
