@@ -6,7 +6,7 @@ export default function BookItem({ book }) {
       <div>
         <div className="flex items-center mb-2">
           <h3 className="font-bold text-xl mr-4">{book.title}</h3>
-          <p className="text-gray-700 text-base">{book.author}</p>
+          <p className="text-gray-700 text-sm">{book.author}</p>
         </div>
         <p className="text-gray-500 text-sm">ISBN: {book.isbn} </p>
       </div>

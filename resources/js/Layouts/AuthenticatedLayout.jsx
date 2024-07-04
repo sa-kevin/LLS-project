@@ -32,7 +32,7 @@ export default function Authenticated({ user, header, children }) {
                   href={route('books.index')}
                   active={route().current('books.index')}
                 >
-                  Book
+                  Books
                 </NavLink>
               </div>
             </div>
