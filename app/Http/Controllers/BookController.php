@@ -11,7 +11,8 @@ class BookController extends Controller
    
     public function index()
     {
-        $books = Book::all();
+        $query = Book::query();
+        $books = $query->paginate(10);
         return Inertia::render('Books', ['books' => $books]);
     }
   
