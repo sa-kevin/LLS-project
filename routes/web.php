@@ -1,10 +1,12 @@
 <?php
 
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\Dashboard;
 use App\Http\Controllers\LoanController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WaitingListController;
 use App\Http\Controllers\WishlistController;
+use App\Models\Wishlist;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -19,7 +21,8 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
+    $wishlist = Wishlist::with('book')->where('user_id', auth()->id())->get();
+    return Inertia::render('Dashboard', ['wishlist' => $wishlist]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
