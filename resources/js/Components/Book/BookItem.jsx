@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import BookCard from './BookCard';
+import { Inertia } from '@inertiajs/inertia';
 
 export default function BookItem({ book }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
