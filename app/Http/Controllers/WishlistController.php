@@ -10,8 +10,9 @@ class WishlistController extends Controller
 {
     public function index()
     {
+        
         $wishlists = Wishlist::with('book')->where('user_id', auth()->id())->get();
-        return Inertia::render('Wishlists/Index', ['wishlists' => $wishlists]);
+        return Inertia::render('wishlists', ['wishlists' => $wishlists]);
     }
     public function store(Request $request)
     {
@@ -23,12 +24,36 @@ class WishlistController extends Controller
             'book_id' => $request->book_id,
         ]);
 
-        return redirect()->route('wishlists.index')->with('success', 'Book added to wishlist');
+        return redirect()->route('wishlists')->with('success', 'Book added to wishlist');
     }
     public function destroy(Wishlist $wishlist)
     {
         $wishlist->delete();
-        return redirect()->route('wishlist.index')->with('success', 'Book removed from wishlist.');
+        return redirect()->route('wishlists')->with('success', 'Book removed from wishlist.');
 
+    }
+
+    public function toggle(Request $request)
+    {
+        $request->validate([
+            'book_id' => 'required|exists:books,id',
+        ]);
+
+        $wishlist = Wishlist::where('user_id', auth()->id())
+            ->where('book_id', $request->book_id)
+            ->first();
+
+        if ($wishlist) {
+            $wishlist->delete();
+            $message = 'Book removed from wishlist';
+        } else {
+            Wishlist::create([
+                'user_id' => auth()->id(),
+                'book_id' => $request->book_id,
+            ]);
+            $message = 'Book added to wishlist';
+        }
+
+        return redirect()->route('wishlists')->with('success', $message);
     }
 }
