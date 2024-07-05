@@ -3,6 +3,8 @@
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\LoanController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\WaitingListController;
+use App\Http\Controllers\WishlistController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -29,6 +31,8 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth', 'verified'])->group(function (){
     Route::resource('books', BookController::class);
     Route::resource('loans', LoanController::class);
+    Route::resource('wishlists', WishlistController::class);
+    Route::resource('waitinglists', WaitingListController::class);
 });
 
 require __DIR__.'/auth.php';
