@@ -29,7 +29,7 @@ class WishlistController extends Controller
     public function destroy(Wishlist $wishlist)
     {
         $wishlist->delete();
-        return redirect()->route('wishlists')->with('success', 'Book removed from wishlist.');
+        return response()->json(['message' => 'Book removed from wishlist.']);
 
     }
 
