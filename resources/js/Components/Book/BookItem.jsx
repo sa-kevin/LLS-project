@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import BookCard from './BookCard';
-import { Inertia } from '@inertiajs/inertia';
+import { router } from '@inertiajs/react';
+import { route } from 'ziggy-js';
 
 export default function BookItem({ book }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -9,7 +10,17 @@ export default function BookItem({ book }) {
     console.log('Rent or wait for:', book.title);
   };
   const handleAddToWishlist = () => {
-    console.log('add to wishlist:', book.title);
+    router.post(
+      route('wishlists.store'),
+      {
+        book_id: book.id,
+      },
+      {
+        preserveState: true,
+        preserveScroll: true,
+      }
+    );
+    setIsModalOpen(false);
   };
 
   return (
