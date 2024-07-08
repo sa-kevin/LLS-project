@@ -22,7 +22,7 @@ Route::get('/', function () {
 
 Route::get('/dashboard', function () {
     $wishlist = Wishlist::with('book')->where('user_id', auth()->id())->get();
-    return Inertia::render('Dashboard', ['wishlist' => $wishlist]);
+    return Inertia::render('Dashboard', ['wishlist' => $wishlist, 'flash => []']);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
