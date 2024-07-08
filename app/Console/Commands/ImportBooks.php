@@ -11,12 +11,14 @@ use League\Csv\Reader;
 class ImportBooks extends Command
 {
     
-    protected $signature = 'books:import {files}';
+    protected $signature = 'books:import {file}';
     protected $description = 'Import books from a CSV file and upload to Minio';
     
     public function handle()
     {
-        $filePath = $this->argument('file');
+        $fileName = $this->argument('file');
+        $filePath = base_path($fileName);
+        // $filePath = storage_path('app/' . $this->argument('file')); if the file is not in root.
 
         if (!file_exists($filePath)){
             $this->error('File not found: {$filePath}');
@@ -48,7 +50,7 @@ class ImportBooks extends Command
                 }
 
                 // ISBN uniqueness
-                if ($bookData['isbn'] && Book::where('isbn', $bookData['isbn'])->exist()) {
+                if ($bookData['isbn'] && Book::where('isbn', $bookData['isbn'])->exists()) {
                     $this->warn("Book with ISBN {$bookData['isbn']} already exists. Skipping. ");
                     continue;
                 }
@@ -63,13 +65,38 @@ class ImportBooks extends Command
         }
 
         // upload to Minio
-        $fileName = basename($filePath);
-        $uploaded = Storage::disk('s3')->putFileAs('cvs_imports', $filePath, $fileName);
+        try {
+            
+            $this->info("Checking MinIO connection...");
+            $files = Storage::disk('minio')->files('/');
+            $this->info("Connection successful. Root directory contents: " . implode(', ', $files));
+            
+    
 
-        if ($uploaded) {
-            $this->info("file uploaded to Mimio: {$fileName}");
-        } else {
-            $this->error("Failed to upload file to minio");
+            $this->info("attempting to upload file to minio...");
+
+            if (!file_exists($filePath)) {
+                $this->error("File does not exist: {$filePath} ");
+                return 1;
+            }
+
+            $fileContent = file_get_contents($filePath);
+
+            if ($fileContent === false) {
+                $this->error("Failed to read file contents");
+                return 1;
+            }
+
+            $uploaded = Storage::disk('minio')->put('cvs_imports/' . $fileName, $fileContent);
+    
+            if ($uploaded) {
+                $this->info("file uploaded to Mimio: csv_imports/{$fileName}");
+            } else {
+                $this->error("Failed to upload file to minio");
+            }
+        } catch (\Exception $e) {
+            $this->error("error uploading file to minio:" . $e->getMessage());
+            $this->error("Strack trace: " . $e->getTraceAsString());
         }
 
         return 0;
