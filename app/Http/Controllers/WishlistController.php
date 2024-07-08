@@ -29,7 +29,14 @@ class WishlistController extends Controller
     public function destroy(Wishlist $wishlist)
     {
         $wishlist->delete();
-        return response()->json(['message' => 'Book removed from wishlist.']);
+        $updatedWishlist = Wishlist::with('book')->where('user_id', auth()->id())->get();
+
+        return Inertia::render('Dashboard', [
+            'wishlist' => $updatedWishlist,
+            'flash' => [
+                'success' => 'Book removed from wishlist.'
+            ]
+            ]);
 
     }
 
