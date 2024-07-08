@@ -19,12 +19,17 @@ class WishlistController extends Controller
         $request->validate([
             'book_id' => 'required|exists:books,id',
         ]);
-        Wishlist::create([
+        $wishlist = Wishlist::create([
             'user_id' => auth()->id(),
             'book_id' => $request->book_id,
         ]);
 
-        return redirect()->route('wishlists')->with('success', 'Book added to wishlist');
+        if ($wishlist->wasRecentlyCreated){
+            $message = 'Book added to wishlist,';
+        } else {
+            $message = ' Book is already in your wishlist.';
+        }
+        return back()->with('success', $message);
     }
     public function destroy(Wishlist $wishlist)
     {
