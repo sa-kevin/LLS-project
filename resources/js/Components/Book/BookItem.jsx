@@ -60,7 +60,7 @@ export default function BookItem({ book, loans }) {
       {isModalOpen && (
         <BookCard
           book={book}
-          loans={loans}
+          loans={book.loans}
           onClose={() => setIsModalOpen(false)}
           onLoan={handleLoans}
           onWait={handleWaitList}
