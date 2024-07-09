@@ -2,12 +2,29 @@ import { useState } from 'react';
 import BookCard from './BookCard';
 import { router } from '@inertiajs/react';
 import { route } from 'ziggy-js';
+import { Inertia } from '@inertiajs/inertia';
 
-export default function BookItem({ book }) {
+export default function BookItem({ book, loans }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleRentOrWait = () => {
-    console.log('Rent or wait for:', book.title);
+  const handleLoans = (dueDate) => {
+    router.post(
+      route('loans.store'),
+      { book_id: book.id, due_date: dueDate },
+      { preserveState: true, preserveScroll: true }
+    );
+    console.log('Rent:', book.title);
+    setIsModalOpen(false);
+  };
+
+  const handleWaitList = () => {
+    router.post(
+      route('waitinglists.store'),
+      { book_id: book.id },
+      { preserveState: true, preserveScroll: true }
+    );
+    console.log('add user to waitng list for:', book.title);
+    setIsModalOpen(false);
   };
   const handleAddToWishlist = () => {
     router.post(
@@ -36,7 +53,6 @@ export default function BookItem({ book }) {
         <button
           onClick={() => setIsModalOpen(true)}
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-4"
-          //href={route('books.show', book.id)}
         >
           View Details
         </button>
@@ -44,9 +60,12 @@ export default function BookItem({ book }) {
       {isModalOpen && (
         <BookCard
           book={book}
+          loans={loans}
           onClose={() => setIsModalOpen(false)}
-          onRentOrWait={handleRentOrWait}
+          onLoan={handleLoans}
+          onWait={handleWaitList}
           onAddToWishlist={handleAddToWishlist}
+          isAvailable={book.is_available}
         />
       )}
     </>
