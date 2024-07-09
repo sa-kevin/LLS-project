@@ -11,8 +11,10 @@ class BookController extends Controller
    
     public function index()
     {
+        
         $books = Book::all()->map(function ($book) {
             $book->is_available = $book->isAvailable();
+            $book->load('loans');
             return [
                 'id' => $book->id,
                 'title' => $book->title,
@@ -21,6 +23,7 @@ class BookController extends Controller
                 'isbn' => $book->isbn,
                 'published_at' => $book->published_at,
                 'is_available' => $book->isAvailable(),
+                'loans' => $book->loans, 
             ];
         });
 
