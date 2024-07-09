@@ -1,13 +1,38 @@
+import { useState } from 'react';
+import DatePickerModal from '../DatePickerModal';
+
 export default function BookCard({
   book,
+  loans,
   onClose,
   onAddToWishlist,
-  onRentOrWait,
+  onLoan,
+  onWait,
+  isAvailable,
 }) {
+  // const [returnDate, setReturnDate] = useState(null);
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
+
+  const handleClick = () => {
+    setIsDatePickerOpen(true);
+  };
+
+  const handleDatePickerClose = () => {
+    setIsDatePickerOpen(false);
+  };
+  const handleLoan = (returnDate) => {
+    if (returnDate) {
+      onLoan(returnDate.toISOString().split('T')[0]); // format as YYY-MM-DD
+    } else {
+      alert('Please select a return date.');
+    }
+  };
+  console.log('isAvailable:', isAvailable);
+
   return (
     <div
-      className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full transition-opacity duration-300 ease-in-out"
       onClick={onClose}
+      className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full transition-opacity duration-300 ease-in-out"
     >
       <div
         className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white"
@@ -46,7 +71,9 @@ export default function BookCard({
           </div>
 
           <div className="mb-4">
-            <p className="text-sm text-gray-700">Next available: 08/10 </p>
+            {/* <p className="text-sm text-gray-700">
+              Next available: {loans.due_date + 1}
+            </p> */}
             <p className="text-sm text-gray-700">Waiting list: 2 peoples</p>
           </div>
 
@@ -54,12 +81,22 @@ export default function BookCard({
           <div className="text-sm text-gray-700 mb-4">{book.description}</div>
 
           <div className="flex justify-between gap-5 p-4">
-            <button
-              className="px-4 py-2 bg-blue-500 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-300"
-              onClick={onRentOrWait}
-            >
-              {book.isAvailable ? 'Rent Now' : ' Join Waitlist'}
-            </button>
+            {isAvailable ? (
+              <button
+                onClick={handleClick}
+                className="px-4 py-2 bg-blue-500 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-300"
+              >
+                Rent Now
+              </button>
+            ) : (
+              <button
+                onClick={onWait}
+                className="px-4 py-2 bg-blue-500 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-300"
+              >
+                Waiting list
+              </button>
+            )}
+
             <button
               className="px-4 py-2 bg-blue-500 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-300"
               onClick={onAddToWishlist}
@@ -69,6 +106,11 @@ export default function BookCard({
           </div>
         </div>
       </div>
+      <DatePickerModal
+        isOpen={isDatePickerOpen}
+        onClose={handleDatePickerClose}
+        onConfirm={handleLoan}
+      />
     </div>
   );
 }
