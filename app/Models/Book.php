@@ -16,4 +16,20 @@ class Book extends Model
     {
         return $this->hasMany(Loan::class);
     }
+
+    public function waitingList()
+    {
+        return $this->hasMany(WaitingList::class);
+    }
+
+    public function activeLoans()
+    {
+        return $this->loans()->whereNull('returned_at');
+    }
+
+    public function isAvailable()
+    {
+        return !$this->activeLoans()->exists();
+    }
+
 }
