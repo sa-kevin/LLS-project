@@ -11,9 +11,20 @@ class BookController extends Controller
    
     public function index()
     {
-        $query = Book::query();
-        $books = $query->paginate(10);
-        return Inertia::render('Books', ['books' => $books->items()]);
+        $books = Book::all()->map(function ($book) {
+            $book->is_available = $book->isAvailable();
+            return [
+                'id' => $book->id,
+                'title' => $book->title,
+                'author' => $book->author,
+                'description' => $book->description,
+                'isbn' => $book->isbn,
+                'published_at' => $book->published_at,
+                'is_available' => $book->isAvailable(),
+            ];
+        });
+
+        return Inertia::render('Books', ['books' => $books]);
     }
   
     public function create()
@@ -38,7 +49,20 @@ class BookController extends Controller
 
     public function show(Book $book)
     {
-        return Inertia::render('Books/Show', ['book' => $book]);
+        // $book->load('loans');
+        // $bookData = [
+        //     'id' => $book->id,
+        //     'title' => $book->title,
+        //     'author' => $book->author,
+        //     'description' => $book->description,
+        //     'isbn' => $book->isbn,
+        //     'published_at' => $book->published_at,
+        //     'is_available' => $book->isAvailable(),
+        // ];
+
+        // return Inertia::render('Books', [
+        //     'book' => $bookData
+        // ]);
     }
 
     public function edit(Book $book)
