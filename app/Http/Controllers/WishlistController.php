@@ -42,7 +42,6 @@ class WishlistController extends Controller
                 'success' => 'Book removed from wishlist.'
             ]
             ]);
-
     }
 
     // not using it yet
