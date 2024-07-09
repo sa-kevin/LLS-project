@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import DatePickerModal from '../DatePickerModal';
+import { data } from 'autoprefixer';
 
 export default function BookCard({
   book,
@@ -20,6 +21,7 @@ export default function BookCard({
   const handleDatePickerClose = () => {
     setIsDatePickerOpen(false);
   };
+
   const handleLoan = (returnDate) => {
     if (returnDate) {
       onLoan(returnDate.toISOString().split('T')[0]); // format as YYY-MM-DD
@@ -27,7 +29,23 @@ export default function BookCard({
       alert('Please select a return date.');
     }
   };
+
+  const getNextAvailableDate = () => {
+    if (!loans || loans.length === 0) return 'Available now';
+
+    const latestDueData = loans.reduce((latest, loan) => {
+      const dueDate = new Date(loan.due_date);
+      return dueDate > latest ? dueDate : latest;
+    }, new Date(0));
+
+    const nextAvailableDate = new Date(latestDueData);
+    nextAvailableDate.setDate(nextAvailableDate.getDate() + 1);
+
+    return nextAvailableDate.toDateString();
+  };
+
   console.log('isAvailable:', isAvailable);
+  console.log('Next available date:', getNextAvailableDate());
 
   return (
     <div
@@ -71,9 +89,9 @@ export default function BookCard({
           </div>
 
           <div className="mb-4">
-            {/* <p className="text-sm text-gray-700">
-              Next available: {loans.due_date + 1}
-            </p> */}
+            <p className="text-sm text-gray-700">
+              Next available: {getNextAvailableDate()}
+            </p>
             <p className="text-sm text-gray-700">Waiting list: 2 peoples</p>
           </div>
 
