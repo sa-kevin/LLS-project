@@ -45,6 +45,7 @@ class WishlistController extends Controller
 
     }
 
+    // not using it yet
     public function toggle(Request $request)
     {
         $request->validate([
