@@ -30,14 +30,23 @@ class LoanController extends Controller
     {
         $request->validate([
             'book_id' => 'required|exists:books,id',
-            'user_id' => 'required|exists:users,id',
-            'loaned_at' => 'required|date',
             'due_date' => 'required|date|after_or_equal:loaned_at',
         ]);
 
-        Loan::create($request->all());
+        $book = Book::findOrFail($request->book_id);
 
-        return redirect()->route('loans.index')->with('success', 'Loan created successfully');
+        if (!$book->isAvailable()) {
+            return back()->with('error', 'This book is currently not available.');
+        }
+
+        $loan = Loan::create([
+            'user_id' => auth()->id(),
+            'book_id' => $request->book_id,
+            'loaned_at' => now(),
+            'due_date' => $request->due_date,
+        ]);
+
+        return back()->with('success', 'Book rented successfully.');
     }
 
     public function show(Loan $loan)
