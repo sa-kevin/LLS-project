@@ -10,6 +10,7 @@ export default function BookCard({
   onLoan,
   onWait,
   isAvailable,
+  waitingListCount,
 }) {
   // const [returnDate, setReturnDate] = useState(null);
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
@@ -92,7 +93,9 @@ export default function BookCard({
             <p className="text-sm text-gray-700">
               Next available: {getNextAvailableDate()}
             </p>
-            <p className="text-sm text-gray-700">Waiting list: 2 peoples</p>
+            <p className="text-sm text-gray-700">
+              Waiting list: {waitingListCount} peoples
+            </p>
           </div>
 
           <p className="text-md text-gray-700 font-bold mb-2">Description:</p>
