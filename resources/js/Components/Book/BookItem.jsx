@@ -66,6 +66,7 @@ export default function BookItem({ book, loans }) {
           onWait={handleWaitList}
           onAddToWishlist={handleAddToWishlist}
           isAvailable={book.is_available}
+          waitingListCount={book.waiting_list_count}
         />
       )}
     </>
