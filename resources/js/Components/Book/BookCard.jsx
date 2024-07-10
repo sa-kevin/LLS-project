@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import DatePickerModal from '../DatePickerModal';
-import { data } from 'autoprefixer';
 
 export default function BookCard({
   book,
@@ -12,7 +11,6 @@ export default function BookCard({
   isAvailable,
   waitingListCount,
 }) {
-  // const [returnDate, setReturnDate] = useState(null);
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
 
   const handleClick = () => {
