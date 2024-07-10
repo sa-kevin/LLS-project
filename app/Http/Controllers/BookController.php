@@ -14,7 +14,7 @@ class BookController extends Controller
         
         $books = Book::all()->map(function ($book) {
             $book->is_available = $book->isAvailable();
-            $book->load('loans');
+            $book->load('loans', 'waitingList');
             return [
                 'id' => $book->id,
                 'title' => $book->title,
@@ -23,7 +23,8 @@ class BookController extends Controller
                 'isbn' => $book->isbn,
                 'published_at' => $book->published_at,
                 'is_available' => $book->isAvailable(),
-                'loans' => $book->loans, 
+                'loans' => $book->loans,
+                'waiting_list_count' => $book->waitingList()->count(),
             ];
         });
 
@@ -52,20 +53,10 @@ class BookController extends Controller
 
     public function show(Book $book)
     {
-        // $book->load('loans');
-        // $bookData = [
-        //     'id' => $book->id,
-        //     'title' => $book->title,
-        //     'author' => $book->author,
-        //     'description' => $book->description,
-        //     'isbn' => $book->isbn,
-        //     'published_at' => $book->published_at,
-        //     'is_available' => $book->isAvailable(),
-        // ];
-
-        // return Inertia::render('Books', [
-        //     'book' => $bookData
-        // ]);
+       
+        return Inertia::render('Books', [
+            'book' => $book
+        ]);
     }
 
     public function edit(Book $book)
