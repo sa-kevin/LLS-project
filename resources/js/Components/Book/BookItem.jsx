@@ -1,11 +1,22 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import BookCard from './BookCard';
-import { router } from '@inertiajs/react';
+import { router, usePage } from '@inertiajs/react';
 import { route } from 'ziggy-js';
-import { Inertia } from '@inertiajs/inertia';
 
-export default function BookItem({ book, loans }) {
+export default function BookItem({ book }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { flash } = usePage().props;
+  const [showFlash, setShowFlash] = useState(false);
+
+  useEffect(() => {
+    if (flash && flash.book_id === book.id) {
+      setShowFlash(true);
+      const timer = setTimeout(() => {
+        setShowFlash(false);
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [flash, book.id]);
 
   const handleLoans = (dueDate) => {
     router.post(
@@ -50,6 +61,20 @@ export default function BookItem({ book, loans }) {
           </div>
           <p className="text-gray-500 text-sm">ISBN: {book.isbn} </p>
         </div>
+        {showFlash && flash.book_id === book.id && (
+          <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 mt-4">
+            <div
+              className={`px-4 py-3 rounded relative ${
+                flash.type === 'success'
+                  ? 'bg-green-100 border-green-400 text-green-700'
+                  : 'bg-red-100 border-red-400 text-red-700'
+              }`}
+              role="alert"
+            >
+              <span className="block sm:inline">{flash.message}</span>
+            </div>
+          </div>
+        )}
         <button
           onClick={() => setIsModalOpen(true)}
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-4"
