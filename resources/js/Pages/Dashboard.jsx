@@ -3,8 +3,9 @@ import { Head, usePage } from '@inertiajs/react';
 import UserCard from '../Components/User/UserCard';
 import Wishlist from '../Components/User/Wishlist';
 import { useEffect, useState } from 'react';
+import LoanList from '../Components/Loan/LoanList';
 
-export default function Dashboard({ auth, wishlist }) {
+export default function Dashboard({ auth, wishlist, loans }) {
   console.log('Wishlist Items:', wishlist);
 
   const { flash } = usePage().props;
@@ -44,10 +45,24 @@ export default function Dashboard({ auth, wishlist }) {
       <div className="py-12">
         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
           <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-            <div className="p-6 text-gray-900 text-center ">Welcome User!</div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <UserCard user={auth.user} />
-              <Wishlist wishlists={wishlist} />
+            <div className="p-6 text-gray-900 text-center mb-6">
+              <h3 className="text-2xl font-bold">Welcome, {auth.user.name}!</h3>
+            </div>
+            <div className="px-6 pb-6">
+              <div
+                className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6"
+                style={{ height: '400px' }}
+              >
+                <div className="h-full">
+                  <UserCard user={auth.user} />
+                </div>
+                <div className="h-full">
+                  <Wishlist wishlists={wishlist} />
+                </div>
+              </div>
+              <div className="mt-6">
+                <LoanList loans={loans} />
+              </div>
             </div>
           </div>
         </div>
