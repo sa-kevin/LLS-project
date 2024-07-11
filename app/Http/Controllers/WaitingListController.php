@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\WaitingList;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -18,11 +19,22 @@ class WaitingListController extends Controller
         $request->validate([
             'book_id' => 'required|exists:books,id',
         ]);
-        WaitingList::create([
-            'user_id' => auth()->id(),
-            'book_id' => $request->book_id,
-        ]);
-        return redirect()->route('waitinglists.index')->with('success', 'you have been added to the waiting list for this book.');
+        try {
+            $waitingList = WaitingList::create([
+                'user_id' => auth()->id(),
+                'book_id' => $request->book_id,
+            ]);
+    
+            return back()->with('success', 'You have been added to the waiting list.');
+        } catch (QueryException $e) {
+            // Check if the exception is due to a duplicate entry
+            if ($e->errorInfo[1] == 1062) {
+                return back()->with('error', 'You are already on the waiting list for this book.');
+            }
+            
+            // For other database errors
+            return back()->with('error', 'An error occurred. Please try again.');
+        }
     }
     public function destroy(WaitingList $waitingList)
     {
