@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\Dashboard;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LoanController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WaitingListController;
@@ -20,22 +21,18 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard', function () {
-    $wishlist = Wishlist::with('book')->where('user_id', auth()->id())->get();
-    return Inertia::render('Dashboard', ['wishlist' => $wishlist, 'flash => []']);
-})->middleware(['auth', 'verified'])->name('dashboard');
-
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'verified'])->group(function (){
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
 
-Route::middleware(['auth', 'verified'])->group(function (){
+    Route::resource('waitinglists', WaitingListController::class);
+    Route::resource('wishlists', WishlistController::class);
     Route::resource('books', BookController::class);
     Route::resource('loans', LoanController::class);
-    Route::resource('wishlists', WishlistController::class);
-    Route::resource('waitinglists', WaitingListController::class);
+    Route::post('/loans/{loan}/return', [LoanController::class, 'returnBook'])->name('loans.return');
 });
 
 require __DIR__.'/auth.php';
