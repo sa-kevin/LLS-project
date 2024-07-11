@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import DatePickerModal from '../DatePickerModal';
+import { parseISO, addDays, format } from 'date-fns';
 
 export default function BookCard({
   book,
@@ -23,7 +24,8 @@ export default function BookCard({
 
   const handleLoan = (returnDate) => {
     if (returnDate) {
-      onLoan(returnDate.toISOString().split('T')[0]); // format as YYY-MM-DD
+      onLoan(returnDate);
+      console.log('rented return date:', returnDate);
     } else {
       alert('Please select a return date.');
     }
@@ -32,19 +34,20 @@ export default function BookCard({
   const getNextAvailableDate = () => {
     if (!loans || loans.length === 0) return 'Available now';
 
-    const latestDueData = loans.reduce((latest, loan) => {
-      const dueDate = new Date(loan.due_date);
-      return dueDate > latest ? dueDate : latest;
-    }, new Date(0));
+    const activeLoans = loans
+      .filter((loan) => !loan.returned_at)
+      .sort((a, b) => parseISO(a.due_date) - parseISO(b.due_date));
 
-    const nextAvailableDate = new Date(latestDueData);
-    nextAvailableDate.setDate(nextAvailableDate.getDate() + 1);
+    if (activeLoans.length === 0) return 'Available now';
 
-    return nextAvailableDate.toDateString();
+    const nextDueDate = parseISO(activeLoans[0].due_date);
+    const nextAvailableDate = addDays(nextDueDate, 1);
+
+    return format(nextAvailableDate, 'yyyy-MM-dd');
   };
 
   console.log('isAvailable:', isAvailable);
-  console.log('Next available date:', getNextAvailableDate());
+  console.log(getNextAvailableDate());
 
   return (
     <div
@@ -89,7 +92,8 @@ export default function BookCard({
 
           <div className="mb-4">
             <p className="text-sm text-gray-700">
-              Next available: {getNextAvailableDate()}
+              Next available:{' '}
+              {isAvailable ? 'Available now' : getNextAvailableDate()}
             </p>
             <p className="text-sm text-gray-700">
               Waiting list: {waitingListCount} peoples

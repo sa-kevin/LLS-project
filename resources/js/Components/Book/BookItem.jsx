@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import BookCard from './BookCard';
 import { router, usePage } from '@inertiajs/react';
 import { route } from 'ziggy-js';
+import { format } from 'date-fns';
 
 export default function BookItem({ book }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -19,12 +20,14 @@ export default function BookItem({ book }) {
   }, [flash, book.id]);
 
   const handleLoans = (dueDate) => {
+    const formattedDate = format(dueDate, 'yyyy-MM-dd');
+    console.log('Frontend formattedDate due date:', formattedDate);
     router.post(
       route('loans.store'),
-      { book_id: book.id, due_date: dueDate },
+      { book_id: book.id, due_date: formattedDate },
       { preserveState: true, preserveScroll: true }
     );
-    console.log('Rent:', book.title);
+    console.log('Rent:', book.title, 'due date:', formattedDate);
     setIsModalOpen(false);
   };
 
