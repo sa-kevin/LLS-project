@@ -17,4 +17,16 @@ class WaitingList extends Model
     public function book(){
         return $this->belongsTo(Book::class);
     }
+    public function getNextInLine($bookId)
+    {
+        return static::where('book_id', $bookId)
+                        ->orderBy('created_at')
+                        ->first();
+    }
+    public static function removeUserFromList($userId, $bookId)
+    {
+        return static::where('user_id', $userId)
+                        ->where('book_id', $bookId)
+                        ->delete();
+    }
 }
