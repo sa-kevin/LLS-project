@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Loan;
+use App\Models\User;
 use App\Notifications\BookReturnReminder;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -17,15 +18,19 @@ class SendBookReturnReminders extends Command
     {
         $dueDate = Carbon::tomorrow();
 
-        $loans = Loan::with('user', 'book')
-            ->whereNull('returned_at')
-            ->whereDate('due_date', $dueDate)
-            ->get();
+        $users = User::whereHas('loans', function ($query) use ($dueDate) {
+            $query->whereNull('returned_at')
+                  ->whereDate('due_date', $dueDate);
+        })->with(['loans' => function ($query) use ($dueDate) {
+            $query->whereNull('returned_at')
+                  ->whereDate('due_date', $dueDate)
+                  ->with('book');
+        }])->get();
 
-        foreach ($loans as $loan){
-            $loan->user->notify(new BookReturnReminder($loan));
-            $this->info("Reminder sent for loan ID: {$loan->id}");
+        foreach ($users as $user){
+            $user->notify(new BookReturnReminder($user->loans));
+            $this->info("Reminder sent to User ID: {$user->id} for " . $user->loans->count() . " books.");
         }
-        $this->info("Reminders sent for {$loans->count()} loans.");
+        $this->info("Reminders sent to " . $users->count() . " users.");
     }
 }
