@@ -3,15 +3,11 @@ import { Head } from '@inertiajs/react';
 import BookList from '../Components/Book/BookList';
 
 export default function Book({ auth, books }) {
-  console.log('Books data:', books);
-  console.log('Books type:', typeof books);
-  console.log('Is array:', Array.isArray(books));
-
   return (
     <AuthenticatedLayout
       user={auth.user}
       header={
-        <h2 className="font-semibold text-2xl text-gray-800 leading-tight">
+        <h2 className="font-semibold text-xl text-gray-800 leading-tight">
           List of Books
         </h2>
       }
