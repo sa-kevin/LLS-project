@@ -15,7 +15,18 @@ export default {
       fontFamily: {
         sans: ['Figtree', ...defaultTheme.fontFamily.sans],
         title: ['Orbitron'],
-        main: ['Beiruti'],
+        main: ['Noto Sans JP'],
+        klee: ['Klee One'],
+      },
+      keyframes: {
+        wave: {
+          '0%': { transform: 'translateX(0%)' },
+          '50%': { transform: 'translateX(-25%)' },
+          '100%': { transform: 'translateX(-50%)' },
+        },
+      },
+      animation: {
+        wave: 'wave 15s linear infinite',
       },
     },
   },
