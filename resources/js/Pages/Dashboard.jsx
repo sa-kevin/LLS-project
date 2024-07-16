@@ -5,9 +5,13 @@ import Wishlist from '../Components/User/Wishlist';
 import { useEffect, useState } from 'react';
 import LoanList from '../Components/Loan/LoanList';
 
-export default function Dashboard({ auth, wishlist, loans }) {
-  console.log('Wishlist Items:', wishlist);
-
+export default function Dashboard({
+  auth,
+  wishlist,
+  loans,
+  totalLoans,
+  latestBookTitle,
+}) {
   const { flash } = usePage().props;
   const [showFlash, setShowFlash] = useState(false);
 
@@ -49,15 +53,20 @@ export default function Dashboard({ auth, wishlist, loans }) {
               <h3 className="text-2xl font-bold">Welcome, {auth.user.name}!</h3>
             </div>
             <div className="px-6 pb-6">
-              <div
-                className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6"
-                style={{ height: '400px' }}
-              >
-                <div className="h-full">
-                  <UserCard user={auth.user} />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div className="h-[300px] flex items-center ">
+                  <div className="w-full max-w-md">
+                    <UserCard
+                      user={auth.user}
+                      totalLoans={totalLoans}
+                      latestBookTitle={latestBookTitle}
+                    />
+                  </div>
                 </div>
-                <div className="h-full">
-                  <Wishlist wishlists={wishlist} />
+                <div className="h-[300px] overflow-hidden">
+                  <div className="h-full overflow-y-auto">
+                    <Wishlist wishlists={wishlist} />
+                  </div>
                 </div>
               </div>
               <div className="mt-6">
