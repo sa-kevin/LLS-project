@@ -79,7 +79,7 @@ export default function BookCard({
         <div className="mt-3">
           <div className="flex mb-4">
             <img
-              src={book.imageUrl || 'images/brainBook.png'}
+              src={book.imageUrl || 'images/bookUndefined.svg'}
               alt={book.title}
               className="w-1/2 object-cover rounded-md"
             />
