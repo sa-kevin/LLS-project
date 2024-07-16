@@ -14,8 +14,10 @@ class LoanController extends Controller
 {
     public function index()
     {
+        $user = auth()->user();
         $loans = Loan::with('book', 'user')->get();
-        return Inertia::render('Loans/Index', ['loans' => $loans]);
+
+        return Inertia::render('Dashboard', ['loans' => $loans,]);
     }
 
     public function create()
@@ -141,7 +143,9 @@ class LoanController extends Controller
         ->orderBy('due_date')
         ->get();
 
-        return Inertia::render('Dashboard', ['loans' => $loans,]);
+        return Inertia::render('Dashboard', [
+            'loans' => $loans,
+        ]);
     }
 
     public function returnBook(Request $request, Loan $loan)
