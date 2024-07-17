@@ -3,7 +3,8 @@ import ApplicationLogo from '@/Components/ApplicationLogo';
 import Dropdown from '@/Components/Dropdown';
 import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
-import { Link } from '@inertiajs/react';
+import { Link, router } from '@inertiajs/react';
+import { route } from 'ziggy-js';
 
 export default function Authenticated({ user, header, children }) {
   const [showingNavigationDropdown, setShowingNavigationDropdown] =
@@ -33,6 +34,18 @@ export default function Authenticated({ user, header, children }) {
                   active={route().current('books.index')}
                 >
                   Books
+                </NavLink>
+                <NavLink
+                  href={route('upload.show')}
+                  active={route().current('upload.show')}
+                >
+                  CSV Upload
+                </NavLink>
+                <NavLink
+                  href={route('empty-page')}
+                  active={route().current('empty-page')}
+                >
+                  Empty Page
                 </NavLink>
               </div>
             </div>
