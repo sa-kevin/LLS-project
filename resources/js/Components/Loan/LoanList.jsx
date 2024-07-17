@@ -74,15 +74,18 @@ export default function LoanList({ loans: initialLoans }) {
                 <div className="space-y-1">
                   <h4 className="font-bold text-lg">{loan.book.title}</h4>
                   <p className="text-gray-600 text-sm">{loan.book.author}</p>
-                  <p className="text-gray-600 text-sm">
+                </div>
+                {!loan.returned_at && (
+                  <p className="text-gray-600 font-semibold text-sm">
                     Due: {formatDate(loan.due_date)}
                   </p>
-                  {loan.returned_at && (
-                    <p className="text-green-600 text-sm">
-                      Returned: {formatDate(loan.returned_at)}
-                    </p>
-                  )}
-                </div>
+                )}
+
+                {loan.returned_at && (
+                  <p className="text-green-600 font-bold text-sm">
+                    Returned: {formatDate(loan.returned_at)}
+                  </p>
+                )}
                 {!loan.returned_at && (
                   <button
                     onClick={() => handleReturnBook(loan.id)}
