@@ -1,5 +1,4 @@
 import { Link, Head } from '@inertiajs/react';
-import { useEffect } from 'react';
 
 export default function Welcome({ auth }) {
   return (
