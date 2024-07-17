@@ -4,19 +4,24 @@ namespace App\Http\Controllers;
 
 use App\Models\Book;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
-use League\Csv\Reader;
+
 
 class BookController extends Controller
 {
-   public function index()
+   public function index(Request $request)
     {
-        $books = Book::all()->map(function ($book) {
-            $book->is_available = $book->isAvailable();
-            $book->load('loans', 'waitingList');
+        $search = $request->input('search');
+
+        $books = Book::query()
+        ->when($search, function ($query, $search) {
+            return $query->where('title', 'like', "%{$search}%")
+                         ->orWhere('author', 'like', "%{$search}%")
+                         ->orWhere('isbn', 'like', "%{$search}%");
+        })
+        ->with(['loans', 'waitingList'])
+        ->get()
+        ->map(function ($book) {
             return [
                 'id' => $book->id,
                 'title' => $book->title,
@@ -26,10 +31,14 @@ class BookController extends Controller
                 'published_at' => $book->published_at,
                 'is_available' => $book->isAvailable(),
                 'loans' => $book->loans,
-                'waiting_list_count' => $book->waitingList()->count(),
+                'waiting_list_count' => $book->waitingList->count(),
             ];
         });
-        return Inertia::render('Books', ['books' => $books]);
+
+        return Inertia::render('Books', [
+        'books' => $books,
+        'search' => $search,
+    ]);
     }
   
     public function create()
