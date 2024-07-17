@@ -4,14 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Models\Book;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
+use League\Csv\Reader;
 
 class BookController extends Controller
 {
-   
-    public function index()
+   public function index()
     {
-        
         $books = Book::all()->map(function ($book) {
             $book->is_available = $book->isAvailable();
             $book->load('loans', 'waitingList');
@@ -27,7 +29,6 @@ class BookController extends Controller
                 'waiting_list_count' => $book->waitingList()->count(),
             ];
         });
-
         return Inertia::render('Books', ['books' => $books]);
     }
   
@@ -48,15 +49,11 @@ class BookController extends Controller
         Book::create($request->all());
 
         return redirect()->route('books.index')->with('success', 'Book created successfully.');
-
     }
 
     public function show(Book $book)
     {
-       
-        return Inertia::render('Books', [
-            'book' => $book
-        ]);
+        return Inertia::render('Books', ['book' => $book]);
     }
 
     public function edit(Book $book)
@@ -76,13 +73,12 @@ class BookController extends Controller
         $book->update($request->all());
 
         return redirect()->route('books.index')->with('success', 'Book updated successfully.');
-
     }
 
     public function destroy(Book $book)
     {
         $book->delete();
-        
         return redirect()->route('books.index')->with('success', 'Book deleted successfully');
     }
+
 }
