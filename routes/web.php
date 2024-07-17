@@ -29,7 +29,7 @@ Route::middleware(['auth', 'verified'])->group(function (){
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::resource('books', BookController::class)->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
+    Route::resource('books', BookController::class);
     Route::resource('waitinglists', WaitingListController::class);
     Route::resource('wishlists', WishlistController::class);
 
