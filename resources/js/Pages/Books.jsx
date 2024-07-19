@@ -3,27 +3,58 @@ import { Head, useForm } from '@inertiajs/react';
 import BookList from '../Components/Book/BookList';
 import { route } from 'ziggy-js';
 import { useEffect } from 'react';
+import Pagination from '../Components/Pagination';
 
-export default function Book({ auth, books, search }) {
+export default function Book({ auth, books, search, perPage }) {
   const { data, setData, get, processing } = useForm({
     search: search || '',
+    per_page: perPage || 10,
   });
 
   const handleSearch = (e) => {
     e.preventDefault();
-    get(route('books.index', { search: data.search }), { preserveState: true });
+    get(
+      route('books.index', { search: data.search, per_page: data.per_page }),
+      { preserveState: true }
+    );
+  };
+
+  const handlePerPageChange = (value) => {
+    setData('per_page', value);
+    get(route('books.index', { search: data.search, per_page: value }), {
+      preserveState: true,
+    });
   };
 
   useEffect(() => {
     const debounce = setTimeout(() => {
       if (data.search !== search) {
-        get(route('books.index', { search: data.search }), {
-          preserveState: true,
-        });
+        get(
+          route('books.index', {
+            search: data.search,
+            per_page: data.per_page,
+          }),
+          {
+            preserveState: true,
+          }
+        );
       }
     }, 300);
     return () => clearTimeout(debounce);
-  }, [data.search]);
+  }, [data.search, data.per_page]);
+
+  const PerPageOption = ({ value }) => (
+    <button
+      onClick={() => handlePerPageChange(value)}
+      className={`px-2   ${
+        data.per_page === value
+          ? ' text-gray-950 font-semibold'
+          : ' text-gray-500'
+      }`}
+    >
+      {value}
+    </button>
+  );
 
   return (
     <AuthenticatedLayout
@@ -49,7 +80,16 @@ export default function Book({ auth, books, search }) {
                   className="w-full px-4 py-2 border rounded-md"
                 />
               </form>
-              <BookList books={books} />
+              <div className="flex items-center justify-end ml-4 mb-2 text-sm">
+                <PerPageOption value={10} />
+                <span className="text-gray-500">|</span>
+                <PerPageOption value={20} />
+                <span className="text-gray-500">|</span>
+                <PerPageOption value={50} />
+              </div>
+
+              <BookList books={books.data} />
+              <Pagination links={books.links} />
             </div>
           </div>
         </div>

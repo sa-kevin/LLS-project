@@ -1,13 +1,12 @@
-import { Link } from '@inertiajs/inertia-react';
+import { Link } from '@inertiajs/react';
 
 export default function Pagination({ links }) {
   return (
-    <nav className="text-center mt-4">
-      {links.map((link) => (
+    <div className="mt-6 flex justify-center">
+      {links.map((link, key) => (
         <Link
-          preserveScroll
-          href={link.url || ''}
-          key={link.label}
+          key={key}
+          href={link.url}
           className={
             'inline-block py-2 px-3 rounded-lg text-gray-200 text-xs ' +
             (link.active ? 'bg-gray-950 ' : ' ') +
@@ -15,9 +14,11 @@ export default function Pagination({ links }) {
               ? '!text-gray-500 cursor-not-allowed '
               : 'hover:bg-gray-950')
           }
-          dangerouslySetInnerHTML={{ __html: link.label }}
-        ></Link>
+          preserveState
+        >
+          <span dangerouslySetInnerHTML={{ __html: link.label }}></span>
+        </Link>
       ))}
-    </nav>
+    </div>
   );
 }
