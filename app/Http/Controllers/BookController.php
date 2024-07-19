@@ -2,25 +2,42 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\StorageHelper;
 use App\Models\Book;
+use App\Services\OpenDBService;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 
 class BookController extends Controller
 {
+    protected $openDBService;
+
+    public function __construct(OpenDBService $openDBService)
+    {
+        $this->openDBService = $openDBService;
+    }
+
+
    public function index(Request $request)
     {
         $search = $request->input('search');
+        $perPage = $request->input('per_page', 10);
+        $page = $request->input('page', 1);
 
-        $books = Book::query()
+        $booksQuery = Book::query()
         ->when($search, function ($query, $search) {
             return $query->where('title', 'like', "%{$search}%")
                          ->orWhere('author', 'like', "%{$search}%")
                          ->orWhere('isbn', 'like', "%{$search}%");
         })
-        ->with(['loans', 'waitingList'])
-        ->get()
+        ->with(['loans', 'waitingList']);
+
+        $total = $booksQuery->count();
+
+        $books = $booksQuery->forPage($page, $perPage)->get()
         ->map(function ($book) {
             return [
                 'id' => $book->id,
@@ -32,13 +49,28 @@ class BookController extends Controller
                 'is_available' => $book->isAvailable(),
                 'loans' => $book->loans,
                 'waiting_list_count' => $book->waitingList->count(),
+                'cover_image' => $book->cover_image 
+                ? StorageHelper::getMinioUrl($book->cover_image)
+                : null,
             ];
         });
 
+        $paginatedBooks = new LengthAwarePaginator(
+            $books,
+            $total,
+            $perPage,
+            $page,
+            [
+                'path' => $request->url(),
+                'query' => $request->query(),
+            ]
+        );
+
         return Inertia::render('Books', [
-        'books' => $books,
-        'search' => $search,
-    ]);
+            'books' => $paginatedBooks,
+            'search' => $search,
+            'perPage' => $perPage,
+        ]);
     }
   
     public function create()
@@ -55,8 +87,18 @@ class BookController extends Controller
             'published_at' => 'nullable|date',
             'description' => 'nullable|string',
         ]);
-        Book::create($request->all());
-
+        $bookData = $request->all();
+        
+        // fetch & store cover image
+        if (!empty($bookData['isbn'])) {
+            $coverUrl = $this->openDBService->getCoverImage($bookData['isbn']);
+            if ($coverUrl) {
+                $coverPath = $this->openDBService->downloadAndStoreImage($coverUrl, $bookData['isbn']);
+                $bookData['cover_image'] = $coverPath;
+            }
+        }
+        
+        Book::create($bookData);
         return redirect()->route('books.index')->with('success', 'Book created successfully.');
     }
 
