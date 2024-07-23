@@ -29,29 +29,17 @@ class BookReturnReminder extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         $mailMessage = (new MailMessage)
-            ->subject('Reminder: Book Due for Return')
-            ->line('This is a friendly reminder that the books you borrowed is due for return tomorrow.');
+            ->subject(__('email.book_due.subject'))
+            ->line(__('email.book_due.line1'));
         
         foreach ($this->loans as $loan) {
             $mailMessage->line("- {$loan->book->title}");
         }
 
         return $mailMessage
-                ->action('View My Loans', url('/dashboard'))
-                ->line('Thank you for using Tech Book!');
+                ->action(__('email.book_due.action'), url('/dashboard'))
+                ->line(__('email.book_due.footer'));
 
         
-    }
-
-    /**
-     * Get the array representation of the notification.
-     *
-     * @return array<string, mixed>
-     */
-    public function toArray(object $notifiable): array
-    {
-        return [
-            //
-        ];
     }
 }

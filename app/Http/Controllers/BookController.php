@@ -7,7 +7,6 @@ use App\Models\Book;
 use App\Services\OpenDBService;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 
@@ -52,6 +51,7 @@ class BookController extends Controller
                 'cover_image' => $book->cover_image 
                 ? StorageHelper::getMinioUrl($book->cover_image)
                 : null,
+                
             ];
         });
 
@@ -70,6 +70,19 @@ class BookController extends Controller
             'books' => $paginatedBooks,
             'search' => $search,
             'perPage' => $perPage,
+            'translations' => [
+                    'title' => __('book.title'),
+                    'search' => __('book.search'),
+                    'no_book' => __('book.no_book'),
+                    'detail' => __('book.detail'),
+                    'description' => __('book.description'),
+                    'available' => __('book.available'),
+                    'available_now' => __('book.available_now'),
+                    'waiting' => __('book.waiting'),
+                    'rent_btn' => __('book.rent_btn'),
+                    'waiting_btn' => __('book.waiting_btn'),
+                    'wishlist_btn' => __('book.wishlist_btn'),
+                ],
         ]);
     }
   
@@ -100,16 +113,6 @@ class BookController extends Controller
         
         Book::create($bookData);
         return redirect()->route('books.index')->with('success', 'Book created successfully.');
-    }
-
-    public function show(Book $book)
-    {
-        return Inertia::render('Books', ['book' => $book]);
-    }
-
-    public function edit(Book $book)
-    {
-        return Inertia::render('Books/Edit', ['book' => $book]);
     }
 
     public function update(Request $request, Book $book)

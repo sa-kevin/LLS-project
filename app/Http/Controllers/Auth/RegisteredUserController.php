@@ -20,7 +20,16 @@ class RegisteredUserController extends Controller
      */
     public function create(): Response
     {
-        return Inertia::render('Auth/Register');
+        return Inertia::render('Auth/Register', [
+            'translations' => [
+                'name' => __('auth.name'),
+                'email' => __('auth.email'),
+                'password' => __('auth.password'),
+                'confirm_password' => __('auth.confirm_password'),
+                'register' => __('auth.register'),
+                'already_registered' => __('auth.already_registered'),
+            ],
+        ]);
     }
 
     /**

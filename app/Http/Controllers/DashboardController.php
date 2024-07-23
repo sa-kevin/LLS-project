@@ -31,7 +31,20 @@ class DashboardController extends Controller
             'loans' => $loans,
             'totalLoans' => $totalLoans,
             'latestBookTitle' => $latestBookTitle,
-            'flash' => session('flash', [],)
+            'flash' => session('flash', [],),
+            'translations' => [
+                'title' => __('dashboard.title'),
+                'welcome' => __('dashboard.welcome'),
+                'wishlist' => __('dashboard.wishlist'),
+                'remove' => __('dashboard.remove'),
+                'stats' => __('dashboard.stats'),
+                'last' => __('dashboard.last'),
+                'total' => __('dashboard.total'),
+                'loaned' => __('dashboard.loaned'),
+                'return' => __('dashboard.return'),
+                'due' => __('dashboard.due'),
+                'returned' => __('dashboard.returned'),
+            ],
         ]);
     }
 }

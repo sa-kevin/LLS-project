@@ -20,13 +20,19 @@ class UploadController extends Controller
         $this->openDBService = $openDBService;
     }
 
-
     public function show()
     {
         return Inertia::render('BookUpload', [
             'flash' => [
                 'success' => session('success'),
                 'error' => session('error'),
+            ],
+            'translations' => [
+                'csv_title' => __('upload.csv_title'),
+                'choose' => __('upload.choose'),
+                'no_select' => __('upload.no_select'),
+                'uploading' => __('upload.uploading'),
+                'upload' => __('upload.upload'),
             ],
         ]);
     }
@@ -42,12 +48,10 @@ class UploadController extends Controller
     try {
         $csv = Reader::createFromPath($file->getRealPath(), 'r');
         $csv->setHeaderOffset(0);
-
         $records = $csv->getRecords();
         $importedCount = 0;
 
         foreach ($records as $index => $record) {
-            Log::info("Processing record " . ($index + 1), $record);
 
             try {
                 $bookData = [
@@ -62,8 +66,6 @@ class UploadController extends Controller
                     $bookData['published_at'] = Carbon::parse($record['published_at'])->toDateString();
                 }
 
-                Log::info("Book data prepared", $bookData);
-
                 // Try to fetch cover image, but continue if it fails
                 if (!empty($bookData['isbn'])) {
                     try {
@@ -72,7 +74,6 @@ class UploadController extends Controller
                             $coverPath = $this->openDBService->downloadAndStoreImage($coverUrl, $bookData['isbn']);
                             if ($coverPath) {
                                 $bookData['cover_image'] = $coverPath;
-                                Log::info("Cover image stored", ['isbn' => $bookData['isbn'], 'path' => $coverPath]);
                             }
                         }
                     } catch (\Exception $e) {
@@ -96,7 +97,6 @@ class UploadController extends Controller
 
         try {
             Storage::disk('minio')->put('csv_imports/' . $fileName, file_get_contents($file));
-            Log::info("CSV file uploaded to MinIO", ['filename' => $fileName]);
         } catch (\Exception $e) {
             Log::error("Failed to upload file to MinIO", ['error' => $e->getMessage()]);
             return back()->with('error', 'Failed to upload file to MinIO: ' . $e->getMessage());

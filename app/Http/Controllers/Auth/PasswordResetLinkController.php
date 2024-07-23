@@ -19,6 +19,10 @@ class PasswordResetLinkController extends Controller
     {
         return Inertia::render('Auth/ForgotPassword', [
             'status' => session('status'),
+            'translations' => [
+                'forgot_password_text' => __('auth.forgot_password_text'),
+                'send_password_reset_link' => __('auth.send_password_reset_link'),
+            ],
         ]);
     }
 

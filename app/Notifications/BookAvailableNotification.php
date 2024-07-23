@@ -27,18 +27,11 @@ class BookAvailableNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-                    ->subject('Book Now Available: ' . $this->book->title)
-                    ->line('A book your were waiting for is now available.')
-                    ->line('Book:' . $this->book->title . ' by ' . $this->book->author)
-                    ->action('Rent Now', url('/books' . $this->book->id))
-                    ->line('Please Note that this book will be held for you for the next 24 hours.')
-                    ->line('Thank you for using Tech Book');
-    }
-
-    public function toArray(object $notifiable): array
-    {
-        return [
-            //
-        ];
+                    ->subject(__('email.available.subject') . $this->book->title)
+                    ->line(__('email.available.line1'))
+                    ->line(__('email.available.line1.5') . $this->book->title . ' by ' . $this->book->author)
+                    ->action(__('email.available.action'), url('/books' . $this->book->id))
+                    ->line(__('email.available.line2'))
+                    ->line(__('email.available.footer'));
     }
 }

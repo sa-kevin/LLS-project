@@ -13,20 +13,39 @@ use Inertia\Response;
 
 class ProfileController extends Controller
 {
-    /**
-     * Display the user's profile form.
-     */
     public function edit(Request $request): Response
     {
         return Inertia::render('Profile/Edit', [
             'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
             'status' => session('status'),
+            'translations' => [
+                'setting' => __('profileInfo.setting'),
+                'delete' => __('delete.delete'),
+                'text1' => __('delete.text1'),
+                'delete_btn' => __('delete.delete_btn'),
+                'form_delete' => __('delete.form_delete'),
+                'form_text' => __('delete.form_text'),
+                'cancel' => __('delete.cancel'),
+                'update_pwd' => __('uploadPwd.update_pwd'),
+                'text2' => __('uploadPwd.text2'),
+                'current' => __('uploadPwd.current'),
+                'new' => __('uploadPwd.new'),
+                'confirm' => __('uploadPwd.confirm'),
+                'save_btn' => __('uploadPwd.save_btn'),
+                'saved' => __('uploadPwd.saved'),
+                'profile_info' => __('profileInfo.profile_info'),
+                'text3' => __('profileInfo.text3'),
+                'name' => __('profileInfo.name'),
+                'email' => __('profileInfo.email'),
+                'verify' => __('profileInfo.verify'),
+                'send_btn' => __('profileInfo.send_btn'),
+                'link' => __('profileInfo.link'),
+                'save' => __('profileInfo.save'),
+                'saved2' => __('profileInfo.saved'),
+            ],
         ]);
     }
 
-    /**
-     * Update the user's profile information.
-     */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
         $request->user()->fill($request->validated());
@@ -40,9 +59,6 @@ class ProfileController extends Controller
         return Redirect::route('profile.edit');
     }
 
-    /**
-     * Delete the user's account.
-     */
     public function destroy(Request $request): RedirectResponse
     {
         $request->validate([
