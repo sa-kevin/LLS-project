@@ -18,7 +18,6 @@ class ImportBooks extends Command
     {
         $fileName = $this->argument('file');
         $filePath = base_path($fileName);
-        // $filePath = storage_path('app/' . $this->argument('file')); if the file is not in root.
 
         if (!file_exists($filePath)){
             $this->error('File not found: {$filePath}');
@@ -56,7 +55,7 @@ class ImportBooks extends Command
                 }
 
                 // create record
-                $book = Book::create($bookData);
+                Book::create($bookData);
 
                 $this->info("Processed book: 1book->title");
             } catch (\Exception $e) {
@@ -70,10 +69,6 @@ class ImportBooks extends Command
             $this->info("Checking MinIO connection...");
             $files = Storage::disk('minio')->files('/');
             $this->info("Connection successful. Root directory contents: " . implode(', ', $files));
-            
-    
-
-            $this->info("attempting to upload file to minio...");
 
             if (!file_exists($filePath)) {
                 $this->error("File does not exist: {$filePath} ");

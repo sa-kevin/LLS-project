@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Loan;
 use App\Models\User;
 use App\Notifications\BookReturnReminder;
 use Carbon\Carbon;

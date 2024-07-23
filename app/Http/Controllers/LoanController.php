@@ -32,11 +32,6 @@ class LoanController extends Controller
 
     public function store(Request $request)
     {
-        Log::info('Raw request data: ' . json_encode($request->all()));
-        Log::info('Received due_date: ' . $request->due_date);
-
-        Log::info('Server timezone: ' . config('app.timezone'));
-        Log::info('Current server time: ' . now());
 
         $request->validate([
             'book_id' => 'required|exists:books,id',
@@ -50,7 +45,6 @@ class LoanController extends Controller
         }
 
         $dueDate = Carbon::parse($request->due_date, config('app.timezone'));
-        Log::info('Parsed due_date: ' . $dueDate->toDateTimeString());
 
         $loan = Loan::create([
             'user_id' => auth()->id(),
@@ -58,7 +52,6 @@ class LoanController extends Controller
             'loaned_at' => now(),
             'due_date' => $dueDate,
         ]);
-        Log::info('Saved due_date: ' . $loan->due_date);
 
         return back()->with('success', 'Book rented successfully.');
     }
@@ -81,12 +74,8 @@ class LoanController extends Controller
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Loan $loan)
 {
-    Log::info('Update - Raw request data: ' . json_encode($request->all()));
 
     $request->validate([
         'book_id' => 'required|exists:books,id',
@@ -110,10 +99,6 @@ class LoanController extends Controller
                 ->endOfDay()
         : null;
 
-    Log::info('Update - Parsed loaned_at: ' . $loanedAt->toDateTimeString());
-    Log::info('Update - Parsed due_date: ' . $dueDate->toDateTimeString());
-    Log::info('Update - Parsed returned_at: ' . ($returnedAt ? $returnedAt->toDateTimeString() : 'null'));
-
     $loan->update([
         'book_id' => $request->book_id,
         'user_id' => $request->user_id,
@@ -121,8 +106,6 @@ class LoanController extends Controller
         'due_date' => $dueDate,
         'returned_at' => $returnedAt,
     ]);
-
-    Log::info('Update - Saved loan data: ' . json_encode($loan->toArray()));
 
     return back()->with('success', 'Loan updated successfully');
 }

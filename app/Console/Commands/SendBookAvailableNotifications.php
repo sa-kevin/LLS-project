@@ -4,7 +4,6 @@ namespace App\Console\Commands;
 
 use App\Models\Book;
 use App\Models\Loan;
-use App\Models\WaitingList;
 use App\Notifications\BookAvailableNotification;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
@@ -13,7 +12,6 @@ class SendBookAvailableNotifications extends Command
 {
 
     protected $signature = 'books:notify-available';
-
     protected $description = 'Notify users about available books they were waiting for';
 
     public function handle()

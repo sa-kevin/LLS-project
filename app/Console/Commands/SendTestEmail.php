@@ -8,23 +8,10 @@ use App\Mail\TestMail;
 
 class SendTestEmail extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'send:test-email {email}';
 
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
+    protected $signature = 'send:test-email {email}';
     protected $description = 'Send a test email';
 
-    /**
-     * Execute the console command.
-     */
     public function __construct()
     {
         parent::__construct();

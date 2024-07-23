@@ -20,7 +20,7 @@ class WaitingListController extends Controller
             'book_id' => 'required|exists:books,id',
         ]);
         try {
-            $waitingList = WaitingList::create([
+            WaitingList::create([
                 'user_id' => auth()->id(),
                 'book_id' => $request->book_id,
             ]);
