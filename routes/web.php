@@ -1,15 +1,18 @@
 <?php
 
-use App\Http\Controllers\BookController;
+use App\Http\Controllers\WaitingListController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmptyPageController;
-use App\Http\Controllers\LoanController;
+use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UploadController;
-use App\Http\Controllers\WaitingListController;
-use App\Http\Controllers\WishlistController;
+use App\Http\Controllers\BookController;
+use App\Http\Controllers\LoanController;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\App;
 use Inertia\Inertia;
 
 Route::get('/', function () {
@@ -18,8 +21,18 @@ Route::get('/', function () {
         'canRegister' => Route::has('register'),
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
+        'translations' => ['welcome1' => __('welcome.welcome1'),'welcome2' => __('welcome.welcome2'), 'login' => __('welcome.login'), 'register' => __('welcome.register'), 'dashboard' => __('welcome.dashboard')],
     ]);
 });
+
+Route::get('/language/{locale}', function ($locale) {
+    
+    if (in_array($locale, ['en', 'ja'])) {
+        Session::put('locale', $locale);
+        App::setLocale($locale);
+    }
+    return Redirect::back()->with('locale_changed', true);
+})->name('language.switch');
 
 Route::middleware(['auth', 'verified'])->group(function (){
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -32,9 +45,10 @@ Route::middleware(['auth', 'verified'])->group(function (){
     Route::resource('books', BookController::class);
     Route::resource('waitinglists', WaitingListController::class);
     Route::resource('wishlists', WishlistController::class);
-
+    
     Route::resource('loans', LoanController::class);
     Route::post('/loans/{loan}/return', [LoanController::class, 'returnBook'])->name('loans.return');
+    
     
     Route::get('/upload', [UploadController::class, 'show'])->name('upload.show');
     Route::post('/upload', [UploadController::class, 'uploadProcess'])->name('upload.process');
