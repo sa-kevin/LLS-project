@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Reset Password</title>
+    <title>{{__('email.reset_pwd.title')}}</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -60,27 +60,27 @@
             </tr>
             <tr>
                 <td class="email-body" align="center">
-                    <h1>Reset Your Password</h1>
+                    <h1>{{__('email.reset_pwd.reset')}}</h1>
                 </td>
             </tr>
             <tr>
                 <td class="email-body" align="center">
-                    <p>You are receiving this email because we received a password reset request for your account.</p>
+                    <p>{{__('email.reset_pwd.reset_text')}}</p>
                 </td>
             </tr>
             <tr>
                 <td class="email-body" align="center">
-                    <a href="{{ $url }}" class="btn">Reset Password</a>
+                    <a href="{{ $url }}" class="btn">{{ __('email.reset_pwd.reset_url') }}</a>
                 </td>
             </tr>
             <tr>
                 <td class="email-body" align="center">
-                    <p>If you did not request a password reset, no further action is required.</p>
+                    <p>{{__('email.reset_pwd.no_request')}}</p>
                 </td>
             </tr>
             <tr>
                 <td class="email-footer">
-                    <p>Thanks,<br>{{ config('app.name') }}</p>
+                    <p>{{__('email.reset_pwd.footer')}}<br>{{ config('app.name') }}</p>
                 </td>
             </tr>
         </table>
