@@ -7,7 +7,7 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import { Head, Link, useForm } from '@inertiajs/react';
 
-export default function Login({ status, canResetPassword }) {
+export default function Login({ status, canResetPassword, translations }) {
   const { data, setData, post, processing, errors, reset } = useForm({
     email: '',
     password: '',
@@ -36,7 +36,7 @@ export default function Login({ status, canResetPassword }) {
 
       <form onSubmit={submit} className="space-y-6">
         <div>
-          <InputLabel htmlFor="email" value="Email" />
+          <InputLabel htmlFor="email" value={translations.email} />
 
           <TextInput
             id="email"
@@ -53,7 +53,7 @@ export default function Login({ status, canResetPassword }) {
         </div>
 
         <div className="mt-4">
-          <InputLabel htmlFor="password" value="Password" />
+          <InputLabel htmlFor="password" value={translations.password} />
 
           <TextInput
             id="password"
@@ -75,7 +75,9 @@ export default function Login({ status, canResetPassword }) {
               checked={data.remember}
               onChange={(e) => setData('remember', e.target.checked)}
             />
-            <span className="ms-2 text-sm text-gray-600">Remember me</span>
+            <span className="ms-2 text-sm text-gray-600">
+              {translations.remember_me}
+            </span>
           </label>
         </div>
 
@@ -84,7 +86,7 @@ export default function Login({ status, canResetPassword }) {
             className="w-1/2 flex justify-center items-center"
             disabled={processing}
           >
-            Log in
+            {translations.login}
           </PrimaryButton>
         </div>
 
@@ -94,7 +96,7 @@ export default function Login({ status, canResetPassword }) {
               href={route('password.request')}
               className="text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
-              Forgot your password?
+              {translations.forgot_password}
             </Link>
           </div>
         )}

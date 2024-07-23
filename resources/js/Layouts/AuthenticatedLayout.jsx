@@ -1,14 +1,16 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ApplicationLogo from '@/Components/ApplicationLogo';
 import Dropdown from '@/Components/Dropdown';
 import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
-import { Link, router } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 import { route } from 'ziggy-js';
+import LanguageSwitcher from '@/Components/LanguageSwitcher';
 
 export default function Authenticated({ user, header, children }) {
   const [showingNavigationDropdown, setShowingNavigationDropdown] =
     useState(false);
+  const { trans } = usePage().props;
 
   return (
     <div className=" font-main min-h-screen bg-gray-100">
@@ -27,30 +29,25 @@ export default function Authenticated({ user, header, children }) {
                   href={route('dashboard')}
                   active={route().current('dashboard')}
                 >
-                  Dashboard
+                  {trans.navigation.dashboard}
                 </NavLink>
                 <NavLink
                   href={route('books.index')}
                   active={route().current('books.index')}
                 >
-                  Books
+                  {trans.navigation.books}
                 </NavLink>
                 <NavLink
                   href={route('upload.show')}
                   active={route().current('upload.show')}
                 >
-                  CSV Upload
-                </NavLink>
-                <NavLink
-                  href={route('empty-page')}
-                  active={route().current('empty-page')}
-                >
-                  Empty Page
+                  {trans.navigation.CSV}
                 </NavLink>
               </div>
             </div>
 
             <div className="hidden sm:flex sm:items-center sm:ms-6">
+              <LanguageSwitcher />
               <div className="ms-3 relative">
                 <Dropdown>
                   <Dropdown.Trigger>
@@ -79,14 +76,14 @@ export default function Authenticated({ user, header, children }) {
 
                   <Dropdown.Content>
                     <Dropdown.Link href={route('profile.edit')}>
-                      Setting
+                      {trans.navigation.setting}
                     </Dropdown.Link>
                     <Dropdown.Link
                       href={route('logout')}
                       method="post"
                       as="button"
                     >
-                      Log Out
+                      {trans.navigation.logout}
                     </Dropdown.Link>
                   </Dropdown.Content>
                 </Dropdown>
@@ -142,7 +139,7 @@ export default function Authenticated({ user, header, children }) {
               href={route('dashboard')}
               active={route().current('dashboard')}
             >
-              Dashboard
+              {trans.navigation.dashboard}
             </ResponsiveNavLink>
           </div>
 
@@ -158,14 +155,14 @@ export default function Authenticated({ user, header, children }) {
 
             <div className="mt-3 space-y-1">
               <ResponsiveNavLink href={route('profile.edit')}>
-                Profile
+                {trans.navigation.profile}
               </ResponsiveNavLink>
               <ResponsiveNavLink
                 method="post"
                 href={route('logout')}
                 as="button"
               >
-                Log Out
+                {trans.navigation.logout}
               </ResponsiveNavLink>
             </div>
           </div>

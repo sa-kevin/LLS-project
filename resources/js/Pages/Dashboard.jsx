@@ -11,6 +11,7 @@ export default function Dashboard({
   loans,
   totalLoans,
   latestBookTitle,
+  translations,
 }) {
   const { flash } = usePage().props;
   const [showFlash, setShowFlash] = useState(false);
@@ -29,7 +30,7 @@ export default function Dashboard({
       user={auth.user}
       header={
         <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-          Dashboard
+          {translations.title}
         </h2>
       }
     >
@@ -50,7 +51,9 @@ export default function Dashboard({
         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
           <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
             <div className="p-6 text-gray-900 text-center mb-6">
-              <h3 className="text-2xl font-bold">Welcome, {auth.user.name}!</h3>
+              <h3 className="text-2xl font-bold">
+                {translations.welcome} {auth.user.name}!
+              </h3>
             </div>
             <div className="px-6 pb-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
@@ -60,17 +63,21 @@ export default function Dashboard({
                       user={auth.user}
                       totalLoans={totalLoans}
                       latestBookTitle={latestBookTitle}
+                      translations={translations}
                     />
                   </div>
                 </div>
                 <div className="h-[300px] overflow-hidden">
                   <div className="h-full overflow-y-auto">
-                    <Wishlist wishlists={wishlist} />
+                    <Wishlist
+                      wishlists={wishlist}
+                      translations={translations}
+                    />
                   </div>
                 </div>
               </div>
               <div className="mt-6">
-                <LoanList loans={loans} />
+                <LoanList loans={loans} translations={translations} />
               </div>
             </div>
           </div>

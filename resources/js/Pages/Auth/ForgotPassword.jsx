@@ -4,7 +4,7 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import { Head, useForm } from '@inertiajs/react';
 
-export default function ForgotPassword({ status }) {
+export default function ForgotPassword({ status, translations }) {
   const { data, setData, post, processing, errors } = useForm({
     email: '',
   });
@@ -20,9 +20,7 @@ export default function ForgotPassword({ status }) {
       <Head title="Forgot Password" />
 
       <div className="mb-4 text-sm text-gray-600">
-        Forgot your password? No problem. Just let us know your email address
-        and we will email you a password reset link that will allow you to
-        choose a new one.
+        {translations.forgot_password_text}
       </div>
 
       {status && (
@@ -44,7 +42,7 @@ export default function ForgotPassword({ status }) {
 
         <div className="flex flex-col items-center mt-4">
           <PrimaryButton className="ms-4 mt-5" disabled={processing}>
-            Email Password Reset Link
+            {translations.send_password_reset_link}
           </PrimaryButton>
         </div>
       </form>

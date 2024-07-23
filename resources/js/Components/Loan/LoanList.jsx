@@ -3,7 +3,7 @@ import { parseISO, format } from 'date-fns';
 import { useState } from 'react';
 import { route } from 'ziggy-js';
 
-export default function LoanList({ loans: initialLoans }) {
+export default function LoanList({ loans: initialLoans, translations }) {
   const [loans, setLoans] = useState(initialLoans);
 
   const formatDate = (dateString) => {
@@ -60,7 +60,7 @@ export default function LoanList({ loans: initialLoans }) {
   };
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <h3 className="text-2xl font-bold mb-6">My Loaned Books</h3>
+      <h3 className="text-2xl font-bold mb-6">{translations.loaned}</h3>
       <div className="bg-white shadow-sm rounded-lg overflow-hidden">
         {loans.length === 0 ? (
           <p className="p-6 text-gray-700">You have no loaned books.</p>
@@ -77,13 +77,13 @@ export default function LoanList({ loans: initialLoans }) {
                 </div>
                 {!loan.returned_at && (
                   <p className="text-gray-600 font-semibold text-sm">
-                    Due: {formatDate(loan.due_date)}
+                    {translations.due} {formatDate(loan.due_date)}
                   </p>
                 )}
 
                 {loan.returned_at && (
                   <p className="text-green-600 font-bold text-sm">
-                    Returned: {formatDate(loan.returned_at)}
+                    {translations.returned} {formatDate(loan.returned_at)}
                   </p>
                 )}
                 {!loan.returned_at && (
@@ -91,7 +91,7 @@ export default function LoanList({ loans: initialLoans }) {
                     onClick={() => handleReturnBook(loan.id)}
                     className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded transition duration-150 ease-in-out"
                   >
-                    Return
+                    {translations.return}
                   </button>
                 )}
               </div>

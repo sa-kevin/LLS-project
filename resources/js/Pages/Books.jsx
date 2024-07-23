@@ -5,7 +5,7 @@ import { route } from 'ziggy-js';
 import { useEffect } from 'react';
 import Pagination from '../Components/Pagination';
 
-export default function Book({ auth, books, search, perPage }) {
+export default function Book({ auth, books, search, perPage, translations }) {
   const { data, setData, get, processing } = useForm({
     search: search || '',
     per_page: perPage || 10,
@@ -61,7 +61,7 @@ export default function Book({ auth, books, search, perPage }) {
       user={auth.user}
       header={
         <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-          List of Books
+          {translations.title}
         </h2>
       }
     >
@@ -76,7 +76,7 @@ export default function Book({ auth, books, search, perPage }) {
                   type="text"
                   value={data.search}
                   onChange={(e) => setData('search', e.target.value)}
-                  placeholder="Search books..."
+                  placeholder={translations.search}
                   className="w-full px-4 py-2 border rounded-md"
                 />
               </form>
@@ -88,7 +88,7 @@ export default function Book({ auth, books, search, perPage }) {
                 <PerPageOption value={50} />
               </div>
 
-              <BookList books={books.data} />
+              <BookList books={books.data} translations={translations} />
               <Pagination links={books.links} />
             </div>
           </div>

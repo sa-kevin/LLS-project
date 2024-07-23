@@ -11,6 +11,7 @@ export default function BookCard({
   onWait,
   isAvailable,
   waitingListCount,
+  translations,
 }) {
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
 
@@ -25,7 +26,6 @@ export default function BookCard({
   const handleLoan = (returnDate) => {
     if (returnDate) {
       onLoan(returnDate);
-      console.log('rented return date:', returnDate);
     } else {
       alert('Please select a return date.');
     }
@@ -45,9 +45,6 @@ export default function BookCard({
 
     return format(nextAvailableDate, 'yyyy-MM-dd');
   };
-
-  console.log('isAvailable:', isAvailable);
-  console.log(getNextAvailableDate());
 
   return (
     <div
@@ -91,16 +88,20 @@ export default function BookCard({
           </div>
 
           <div className="mb-4">
-            <p className="text-sm text-gray-700">
-              Next available:{' '}
-              {isAvailable ? 'Available now' : getNextAvailableDate()}
+            <p className="text-sm text-gray-700 font-bold">
+              {translations.available}{' '}
+              {isAvailable
+                ? translations.available_now
+                : getNextAvailableDate()}
             </p>
-            <p className="text-sm text-gray-700">
-              Waiting list: {waitingListCount} peoples
+            <p className="text-sm text-gray-700 font-bold">
+              {translations.waiting} {waitingListCount} peoples
             </p>
           </div>
 
-          <p className="text-md text-gray-700 font-bold mb-2">Description:</p>
+          <p className="text-md text-gray-700 font-bold mb-2">
+            {translations.description}
+          </p>
           <div className="text-sm text-gray-700 mb-4">{book.description}</div>
 
           <div className="flex justify-between gap-5 p-4">
@@ -109,14 +110,14 @@ export default function BookCard({
                 onClick={handleClick}
                 className="px-4 py-2 bg-blue-500 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-300"
               >
-                Rent Now
+                {translations.rent_btn}
               </button>
             ) : (
               <button
                 onClick={onWait}
                 className="px-4 py-2 bg-blue-500 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-300"
               >
-                Waiting list
+                {translations.waiting_btn}
               </button>
             )}
 
@@ -124,7 +125,7 @@ export default function BookCard({
               className="px-4 py-2 bg-blue-500 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-300"
               onClick={onAddToWishlist}
             >
-              Add to Wishlist
+              {translations.wishlist_btn}
             </button>
           </div>
         </div>

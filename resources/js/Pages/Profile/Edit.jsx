@@ -4,13 +4,13 @@ import UpdatePasswordForm from './Partials/UpdatePasswordForm';
 import UpdateProfileInformationForm from './Partials/UpdateProfileInformationForm';
 import { Head } from '@inertiajs/react';
 
-export default function Edit({ auth, mustVerifyEmail, status }) {
+export default function Edit({ auth, mustVerifyEmail, status, translations }) {
   return (
     <AuthenticatedLayout
       user={auth.user}
       header={
         <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-          Setting
+          {translations.setting}
         </h2>
       }
     >
@@ -22,16 +22,20 @@ export default function Edit({ auth, mustVerifyEmail, status }) {
             <UpdateProfileInformationForm
               mustVerifyEmail={mustVerifyEmail}
               status={status}
+              translations={translations}
               className="max-w-xl"
             />
           </div>
 
           <div className="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-            <UpdatePasswordForm className="max-w-xl" />
+            <UpdatePasswordForm
+              className="max-w-xl"
+              translations={translations}
+            />
           </div>
 
           <div className="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-            <DeleteUserForm className="max-w-xl" />
+            <DeleteUserForm className="max-w-xl" translations={translations} />
           </div>
         </div>
       </div>

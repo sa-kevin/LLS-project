@@ -4,7 +4,7 @@ import { router, usePage } from '@inertiajs/react';
 import { route } from 'ziggy-js';
 import { format } from 'date-fns';
 
-export default function BookItem({ book }) {
+export default function BookItem({ book, translations }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { flash } = usePage().props;
   const [showFlash, setShowFlash] = useState(false);
@@ -82,7 +82,7 @@ export default function BookItem({ book }) {
           onClick={() => setIsModalOpen(true)}
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-4"
         >
-          View Details
+          {translations.detail}
         </button>
       </div>
       {isModalOpen && (
@@ -95,6 +95,7 @@ export default function BookItem({ book }) {
           onAddToWishlist={handleAddToWishlist}
           isAvailable={book.is_available}
           waitingListCount={book.waiting_list_count}
+          translations={translations}
         />
       )}
     </>
