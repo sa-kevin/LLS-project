@@ -70,7 +70,7 @@ export default function Dashboard({
                 <div className="h-[300px] overflow-hidden">
                   <div className="h-full overflow-y-auto">
                     <Wishlist
-                      wishlists={wishlist}
+                      wishlists={wishlist || []}
                       translations={translations}
                     />
                   </div>

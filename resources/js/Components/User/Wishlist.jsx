@@ -9,8 +9,9 @@ export default function Wishlist({ wishlists = [], translations }) {
       router.delete(route('wishlists.destroy', id), {
         preserveState: true,
         preserveScroll: true,
+        only: ['wishlist', 'flash'],
       });
-      setSelectBook(null);
+      // setSelectBook(null);
     }
   };
 
@@ -20,9 +21,9 @@ export default function Wishlist({ wishlists = [], translations }) {
       {wishlists.length === 0 ? (
         <div className="flex-grow flex items-center justify-center">
           <p className="text-center text-gray-500">
-            Your wishlist is empty,
+            {translations.empty}
             <br />
-            add something!
+            {translations.add}
           </p>
         </div>
       ) : (
