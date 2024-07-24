@@ -37,7 +37,7 @@ export default function BookItem({ book, translations }) {
       { book_id: book.id },
       { preserveState: true, preserveScroll: true }
     );
-    console.log('add user to waitng list for:', book.title);
+
     setIsModalOpen(false);
   };
   const handleAddToWishlist = () => {
