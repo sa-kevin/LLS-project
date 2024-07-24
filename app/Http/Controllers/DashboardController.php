@@ -44,6 +44,8 @@ class DashboardController extends Controller
                 'return' => __('dashboard.return'),
                 'due' => __('dashboard.due'),
                 'returned' => __('dashboard.returned'),
+                'empty' => __('dashboard.empty'),
+                'add' => __('dashboard.add'),
             ],
         ]);
     }
