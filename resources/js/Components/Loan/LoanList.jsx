@@ -70,30 +70,32 @@ export default function LoanList({ loans: initialLoans, translations }) {
               key={loan.id}
               className="border-b border-gray-200 last:border-b-0"
             >
-              <div className="p-6 flex justify-between items-center">
-                <div className="space-y-1">
+              <div className="p-6 grid grid-cols-3 gap-4 items-center">
+                <div className="space-y-1 col-span-1">
                   <h4 className="font-bold text-lg">{loan.book.title}</h4>
                   <p className="text-gray-600 text-sm">{loan.book.author}</p>
                 </div>
-                {!loan.returned_at && (
-                  <p className="text-gray-600 font-semibold text-sm">
-                    {translations.due} {formatDate(loan.due_date)}
-                  </p>
-                )}
-
-                {loan.returned_at && (
-                  <p className="text-green-600 font-bold text-sm">
-                    {translations.returned} {formatDate(loan.returned_at)}
-                  </p>
-                )}
-                {!loan.returned_at && (
-                  <button
-                    onClick={() => handleReturnBook(loan.id)}
-                    className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded transition duration-150 ease-in-out"
-                  >
-                    {translations.return}
-                  </button>
-                )}
+                <div className="text-center col-span-1">
+                  {!loan.returned_at && (
+                    <p className="text-gray-600 font-semibold text-sm">
+                      {translations.due} {formatDate(loan.due_date)}
+                    </p>
+                  )}
+                </div>
+                <div className="text-right col-span-1">
+                  {!loan.returned_at ? (
+                    <button
+                      onClick={() => handleReturnBook(loan.id)}
+                      className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded transition duration-150 ease-in-out"
+                    >
+                      {translations.return}
+                    </button>
+                  ) : (
+                    <p className="text-green-600 font-bold text-sm">
+                      {translations.returned} {formatDate(loan.returned_at)}
+                    </p>
+                  )}
+                </div>
               </div>
             </div>
           ))
