@@ -6,6 +6,8 @@ return [
 
     'wishlist' => 'My Wishlist',
     'remove' => 'remove',
+    'empty' => 'Your wishlist is empty,',
+    'add' => 'add something!',
 
     'stats' => 'stats',
     'last' => 'last book loaned: ',
