@@ -15,16 +15,18 @@ export default function Wishlist({ wishlists = [], translations }) {
   };
 
   return (
-    <div className="bg-gray-50 shadow-md rounded-lg p-6 h-full flex flex-col">
-      <h2 className="text-2xl font-bold mb-8">{translations.wishlist}</h2>
+    <div className="bg-white shadow-md rounded-lg p-6 h-full flex flex-col">
+      <h2 className="text-2xl font-bold mb-4">{translations.wishlist}</h2>
       {wishlists.length === 0 ? (
-        <p className="flex-grow flex items-center justify-center text-center text-gray-500">
-          Your wishlist is empty,
-          <br />
-          add Something!
-        </p>
+        <div className="flex-grow flex items-center justify-center">
+          <p className="text-center text-gray-500">
+            Your wishlist is empty,
+            <br />
+            add something!
+          </p>
+        </div>
       ) : (
-        <ul className="overflow-y-auto flex-grow -mr-2 pr-2">
+        <ul className="overflow-y-auto flex-grow">
           {wishlists.map((item) => (
             <li
               key={item.id}
