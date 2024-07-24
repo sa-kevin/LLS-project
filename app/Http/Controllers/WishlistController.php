@@ -30,7 +30,7 @@ class WishlistController extends Controller
         if ($existingWishlistItem) {
             return redirect()->back()->with('flash', [
                 'type' => 'error',
-                'message' => 'This book is already in your wishlist.',
+                'message' => __('flashmessage.wishlist_already_added'),
                 'book_id' => $bookId,
             ]);
         }
@@ -42,7 +42,7 @@ class WishlistController extends Controller
 
         return back()->with('flash', [
             'type' => 'success',
-            'message' => 'book added wishlist.',
+            'message' => __('flashmessage.wishlist_add'),
             'book_id' => $bookId,
         ]);
     }
@@ -52,11 +52,17 @@ class WishlistController extends Controller
         $wishlist->delete();
         $updatedWishlist = Wishlist::with('book')->where('user_id', auth()->id())->get();
 
-        return Inertia::render('Dashboard', [
+        // return Inertia::render('Dashboard', [
+        //     'wishlist' => $updatedWishlist,
+        //     'flash' => [
+        //         'success' => 'Book removed from wishlist.'
+        //     ]
+        //     ]);
+        return redirect()->route('dashboard')->with([
             'wishlist' => $updatedWishlist,
             'flash' => [
-                'success' => 'Book removed from wishlist.'
+                'success' => __('flashmessage.wishlist_remove')
             ]
-            ]);
+        ]);
     }
 }
