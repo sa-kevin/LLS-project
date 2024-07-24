@@ -14,7 +14,7 @@ export default function LanguageSwitcher() {
     );
   };
   return (
-    <div className="top-0 right-0 mt-4 mr-4 mb-4">
+    <div className="top-0 right-0 ">
       <button
         className=" text-gray-950 hover:text-gray-500 font-bold"
         onClick={() => switchLanguage('en')}

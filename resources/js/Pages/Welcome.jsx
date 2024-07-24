@@ -19,8 +19,8 @@ export default function Welcome({ auth, translations }) {
                   Tech Book
                 </h1>
               </div>
-              <div className="flex gap-4 items-center">
-                <nav className="-mx-3 flex flex-1 justify-end lg:col-start-3">
+              <div className="flex flex-col gap-2 items-end">
+                <nav className="-mx-3 flex justify-end">
                   {auth.user ? (
                     <Link
                       href={route('dashboard')}
