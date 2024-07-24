@@ -10,6 +10,7 @@ export default function Wishlist({ wishlists = [], translations }) {
         preserveState: true,
         preserveScroll: true,
         only: ['wishlist', 'flash'],
+        replace: true,
       });
       // setSelectBook(null);
     }
